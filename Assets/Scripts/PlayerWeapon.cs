@@ -18,7 +18,7 @@ public class PlayerWeapon : MonoBehaviour
 
     void Update()
     {
-        if (Api.IsTriggerPressed)
+        if (Api.IsTriggerPressed || Input.GetMouseButtonUp(0))
         {
             gunpowderReference.Play();
 
