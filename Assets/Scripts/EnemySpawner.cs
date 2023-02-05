@@ -1,59 +1,75 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class EnemySpawner 
+namespace Piotr.EnemySpawnerObjectPool
 {
-    public float spawnDistanceFromPlayer;
-
-    public Action enemyAttackPlayer;
-    public Action playerKilledEnemy;
-
-    private List<ObjectPool<GameObject>> _poolEnemyList = new List<ObjectPool<GameObject>>();
-
-    public void AddPoolForEnemy(GameObject _enemyObject, float enemySpeed, int enemyHP, Color enemyColor, int index) //add object pool
+    public class EnemySpawner
     {
-        ObjectPool<GameObject> _poolEnemy = new ObjectPool<GameObject>(() =>
+        private readonly bool collectionChecks = true;
+        private readonly int maxPoolSize = 10;
+
+        private readonly List<ObjectPool<GameObject>> poolEnemyList = new List<ObjectPool<GameObject>>();
+        private Transform EnemyContainer;
+
+        public float spawnDistanceFromPlayer;
+
+        public void Spawn(int enemyIndex) //get from pool
         {
-            var enemy = GameObject.Instantiate(_enemyObject, getPosAroundPlayer(), Quaternion.identity);
-            enemy.GetComponent<ICanGetEnemyData>().init(thisEnemyKilled, enemySpeed, enemyHP, enemyColor, index);
-            return enemy;
-        }, objectEnemy =>
+            poolEnemyList[enemyIndex].Get();
+        }
+
+        public void AddPoolForEnemyWithData(GameObject enemyObject, float enemySpeed, int enemyHP, Color enemyColor, int index)
         {
-            objectEnemy.gameObject.SetActive(true);
-        }, objectEnemy =>
+            EnemyContainer = new GameObject().GetComponent<Transform>();
+            EnemyContainer.name = "EnemyContainer";
+
+            ObjectPool<GameObject> poolEnemy = new ObjectPool<GameObject>(() =>
+            {
+                // On adding enemy to pool, with extra data from Enemy Manager           
+                var enemy = GameObject.Instantiate(enemyObject, getPosAroundPlayer(), Quaternion.identity, EnemyContainer);
+                if (enemy.GetComponent<ICanGetEnemyData>() != null)
+                {
+                    enemy.GetComponent<ICanGetEnemyData>().init(thisEnemyKilled, enemySpeed, enemyHP, enemyColor, index);
+                }
+                return enemy;
+            },
+            OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, collectionChecks, 10, maxPoolSize);
+
+            poolEnemyList.Add(poolEnemy);
+        }
+
+
+        #region poolOperations
+        private void OnReturnedToPool(GameObject system)
         {
-            objectEnemy.gameObject.SetActive(false);
-            objectEnemy.transform.position = getPosAroundPlayer();
-        }, objectEnemy =>
+            system.gameObject.SetActive(false);
+        }
+
+        private void OnTakeFromPool(GameObject system)
         {
-            //keeping enemies spawned
-        }, false, 10, 100);
+            system.transform.position = getPosAroundPlayer();
+            system.gameObject.SetActive(true);
+        }
 
-        _poolEnemyList.Add(_poolEnemy);
-    }
+        // If the pool capacity is reached then any items returned will be destroyed.
+        private void OnDestroyPoolObject(GameObject system)
+        {
+            GameObject.Destroy(system.gameObject);
+        }
+        #endregion
 
-    public void Spawn(int enemyIndex) //get from pool
-    {
-        _poolEnemyList[enemyIndex].Get();
-    }
 
-    Vector3 getPosAroundPlayer()
-    {
-        Vector2 outsideCirclePos = UnityEngine.Random.insideUnitCircle.normalized * UnityEngine.Random.Range(spawnDistanceFromPlayer, spawnDistanceFromPlayer+5);
-        Vector3 pos = new Vector3(outsideCirclePos.x, 0, outsideCirclePos.y);
-        return pos;
-    }
+        private Vector3 getPosAroundPlayer()
+        {
+            Vector2 outsideCirclePos = Random.insideUnitCircle.normalized * spawnDistanceFromPlayer;
+            Vector3 pos = new Vector3(outsideCirclePos.x, 0, outsideCirclePos.y);
+            return pos;
+        }
 
-    private void thisEnemyKilled(GameObject enemy, bool isByPlayer, bool attackPlayer, int index) //release from pool
-    {
-        if(isByPlayer)
-            playerKilledEnemy();
-
-        if (attackPlayer)
-            enemyAttackPlayer();
-
-        _poolEnemyList[index].Release(enemy);
+        private void thisEnemyKilled(GameObject enemy, int index) //release from pool
+        {
+            poolEnemyList[index].Release(enemy);
+        }
     }
 }

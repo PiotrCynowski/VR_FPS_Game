@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SetVROrNot : MonoBehaviour
 {
-    public GameObject XRRig;
-    public GameObject WebGLRig;
+    [SerializeField] private GameObject XRRig;
+    [SerializeField] private GameObject WebGLRig;
+   
     private bool isOnXRDevice = false;
 
     private void Awake()

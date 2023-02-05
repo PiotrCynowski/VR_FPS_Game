@@ -30,7 +30,7 @@ public class PlayerWeapon : MonoBehaviour
                     _gazedAtObject = hit.transform.gameObject;
                 }
 
-                _gazedAtObject?.SendMessage("OnPointerClick");
+                //_gazedAtObject?.SendMessage("OnPointerClick"); //ZMIENI? !!!
                 OnHitEffect(hit.point);
             }
             else
