@@ -14,9 +14,20 @@ namespace Piotr.EnemySpawnerObjectPool
 
         public float spawnDistanceFromPlayer;
 
-        public void Spawn(int enemyIndex) //get from pool
+        public void Spawn(int poolIndex)
         {
-            poolEnemyList[enemyIndex].Get();
+            poolEnemyList[poolIndex].Get();
+        }
+
+        public void ResetAllEnemies()
+        {
+            foreach (Transform enemy in EnemyContainer)
+            {
+                if (enemy.GetComponent<IHaveEnemyData>() != null && enemy.gameObject.activeInHierarchy)
+                {
+                    enemy.GetComponent<IHaveEnemyData>().GetReset();
+                }
+            }
         }
 
         public void AddPoolForEnemyWithData(GameObject enemyObject, float enemySpeed, int enemyHP, Color enemyColor, int index)
@@ -30,7 +41,7 @@ namespace Piotr.EnemySpawnerObjectPool
                 var enemy = GameObject.Instantiate(enemyObject, getPosAroundPlayer(), Quaternion.identity, EnemyContainer);
                 if (enemy.GetComponent<IHaveEnemyData>() != null)
                 {
-                    enemy.GetComponent<IHaveEnemyData>().addEnemyData(thisEnemyKilled, enemySpeed, enemyHP, enemyColor, index);
+                    enemy.GetComponent<IHaveEnemyData>().AddEnemyData(thisEnemyKilled, enemySpeed, enemyHP, enemyColor, index);
                 }
                 return enemy;
             },
@@ -67,9 +78,19 @@ namespace Piotr.EnemySpawnerObjectPool
             return pos;
         }
 
-        private void thisEnemyKilled(GameObject enemy, int index) //release from pool
+        private void thisEnemyKilled(GameObject enemy, int poolIndex)
         {
-            poolEnemyList[index].Release(enemy);
+            poolEnemyList[poolIndex].Release(enemy);
         }
     }
+}
+
+
+public interface IHaveEnemyData
+{
+    void AddEnemyData(System.Action<GameObject, int> enemyKilled, float _moveSpeed, int _enemyHP, Color _color, int index);
+
+    void GetDamage();
+
+    void GetReset();
 }

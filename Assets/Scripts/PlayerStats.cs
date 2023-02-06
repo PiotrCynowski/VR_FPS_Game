@@ -15,7 +15,15 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private Image hpImageFill;
 
     [Header("Player Setup")]
-    public int initialPlayerHealth;
+    [Range(1, 50)]
+    [SerializeField] private int initialPlayerHealth;
+    private float hpDropFillImage;
+
+    public delegate void OnGameOver();
+    public static event OnGameOver onGameOver;
+
+    public delegate void OnGameRestart();
+    public static event OnGameRestart onGameRestart;
 
     #region attributes
     private int _playerScore;
@@ -49,8 +57,34 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+    private int _playerHealth;
+
+    public int PlayerHealth
+    {
+        get
+        {   
+            return _playerHealth;
+        }
+        set
+        {
+            _playerHealth = value;
+
+            hpImageFill.fillAmount -= hpDropFillImage;
+
+            if (_playerHealth <= 0)
+            {
+                PlayerLost();
+            }
+        }
+    }
     #endregion
 
+    public void button_GameRestart()
+    {
+        StatReset();
+
+        onGameRestart.Invoke();
+    }
 
     private void Awake()
     {
@@ -66,26 +100,35 @@ public class PlayerStats : MonoBehaviour
 
     private void Start()
     {
+        StatReset();
+
+        PlayerBestResult = PlayerPrefs.GetInt("score");
+    }
+
+    private void StatReset()
+    {
         PlayerStatsCanvas.gameObject.SetActive(true);
         PlayerRestartMenuCanvas.gameObject.SetActive(false);
-    }
 
-    public void StatReset()
-    {
+        PlayerHealth = initialPlayerHealth;
+
         hpImageFill.fillAmount = 1;
+
+        hpDropFillImage = 1f/initialPlayerHealth;
+
+        PlayerScore = 0;
     }
 
-    public void DecreaseHP(float amountOfDrop)
-    {
-        hpImageFill.fillAmount -= amountOfDrop;
-    }
-
-    void PlayerLost()
+    private void PlayerLost()
     {
         if (PlayerPrefs.GetInt("score") < PlayerScore) //check highest score
         {
             PlayerPrefs.SetInt("score", PlayerScore);
+
+            PlayerBestResult = PlayerScore;
         }
+
+        onGameOver.Invoke();
 
         PlayerStatsCanvas.gameObject.SetActive(false);
         PlayerRestartMenuCanvas.gameObject.SetActive(true);

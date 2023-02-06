@@ -10,13 +10,12 @@ public class EnemyBehaviour : MonoBehaviour, IHaveEnemyData
     private int initHP;
     private int currentHP;
     private int whichListPool;
+    private bool isReadyToAttack; //this bool is making sure we're not reseting enemy that was just attacking
 
-    MaterialPropertyBlock[] propBlock;
-    private Color color;
-
+    private MaterialPropertyBlock[] propBlock;
     private Renderer[] renderers;
 
-    public void addEnemyData(Action<GameObject, int> enemyKilled, float moveSpeedE, int enemyHP, Color colorBase, int index)
+    public void AddEnemyData(Action<GameObject, int> enemyKilled, float moveSpeedE, int enemyHP, Color colorBase, int index)
     {
         thisEnemyRemove = enemyKilled;
 
@@ -40,12 +39,14 @@ public class EnemyBehaviour : MonoBehaviour, IHaveEnemyData
         }
     }
 
-    public void getDamage()
+    public void GetDamage()
     {
         currentHP--;
 
         if (currentHP <= 0)
         {
+            isReadyToAttack = false;
+
             thisEnemyRemove(gameObject, whichListPool);
 
             if (PlayerStats.Instance != null)
@@ -59,12 +60,25 @@ public class EnemyBehaviour : MonoBehaviour, IHaveEnemyData
         }
     }
 
-    public void OnEnable()
+    public void GetReset()
     {
-        transform.rotation = Quaternion.LookRotation(-transform.position, Vector3.up);
+        if (isReadyToAttack)
+        {
+            thisEnemyRemove(gameObject, whichListPool);
+
+            isReadyToAttack=false;
+        }
     }
 
-    public void OnDisable()
+
+    private void OnEnable()
+    {
+        isReadyToAttack = true;
+
+        PositionEnemyTowardVectorZeroPlayerPos();
+    }
+
+    private void OnDisable()
     {
         foreach (Renderer r in renderers)
         {
@@ -74,11 +88,18 @@ public class EnemyBehaviour : MonoBehaviour, IHaveEnemyData
         currentHP = initHP;
     }
 
+    private void Start()
+    {
+        PositionEnemyTowardVectorZeroPlayerPos();
+    }
+
     private void Update()
     {
         Move();
+
         attackWhenClose();
     }
+
 
     private void Move()
     {
@@ -89,8 +110,23 @@ public class EnemyBehaviour : MonoBehaviour, IHaveEnemyData
     {
         if (Vector3.Distance(transform.position, Vector3.zero) <= 2.5f)
         {
-            thisEnemyRemove(gameObject, whichListPool);
+            if(PlayerStats.Instance != null)
+            {
+                PlayerStats.Instance.PlayerHealth--;
+            }
+
+            if (isReadyToAttack)
+            {
+                thisEnemyRemove(gameObject, whichListPool);
+
+                isReadyToAttack = false;
+            }
         }
+    }
+
+    private void PositionEnemyTowardVectorZeroPlayerPos()
+    {
+        transform.rotation = Quaternion.LookRotation(-transform.position, Vector3.up);
     }
 
     private IEnumerator colorBlink()
@@ -107,10 +143,5 @@ public class EnemyBehaviour : MonoBehaviour, IHaveEnemyData
             r.SetPropertyBlock(propBlock[0]);
         }
            
-    }
-
-    private void ResetThisEnemy() //shut down enemy on game restart
-    {
-        thisEnemyRemove(gameObject, whichListPool);
     }
 }

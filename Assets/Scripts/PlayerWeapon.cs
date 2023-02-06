@@ -10,7 +10,6 @@ public class PlayerWeapon : MonoBehaviour
     private const float maxDistance = 20;
     private Transform raycastStartPos;
 
-    
     private void Start()
     {
         raycastStartPos = transform.GetChild(0);
@@ -27,7 +26,7 @@ public class PlayerWeapon : MonoBehaviour
             {
                 if (hit.transform.GetComponent<IHaveEnemyData>() != null)
                 {
-                    hit.transform.GetComponent<IHaveEnemyData>().getDamage();
+                    hit.transform.GetComponent<IHaveEnemyData>().GetDamage();
 
                     OnHitEffect(hit.point);
                 }

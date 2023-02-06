@@ -9,22 +9,26 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private EnemyCharacter[] enemyPrefabs;
     [SerializeField] private EnemySpawner enemySpawner;
 
-    public static Action resetEnemies;
-
     [Range(15, 30)]
     public float spawnDistanceFromPlayer;
 
+    private Coroutine[] spawningCoroutines;
+
+
     private void Start()
     {
+        PlayerStats.onGameOver += PlayerLost;
+        PlayerStats.onGameRestart += RestartGame;
+
         enemySpawner = new EnemySpawner();
         enemySpawner.spawnDistanceFromPlayer = spawnDistanceFromPlayer;
 
         for (int i = 0; i < enemyPrefabs.Length; i++)
         {
-            enemySpawner.AddPoolForEnemyWithData(enemyPrefabs[i].enemyObject, enemyPrefabs[i].speed, enemyPrefabs[i].hp, enemyPrefabs[i].enemyColor, i);
-            
-            StartCoroutine(spawnEnemy(enemyPrefabs[i].spawnDelayBetweenThisEnemyType, i));
+            enemySpawner.AddPoolForEnemyWithData(enemyPrefabs[i].enemyObject, enemyPrefabs[i].speed, enemyPrefabs[i].hp, enemyPrefabs[i].enemyColor, i);           
         }
+
+        RestartGame();
     }
 
     private IEnumerator spawnEnemy(float timeDelay, int index)
@@ -38,14 +42,21 @@ public class EnemyManager : MonoBehaviour
 
     private void PlayerLost()
     {
-        resetEnemies();
+        enemySpawner.ResetAllEnemies();
+
+        foreach(Coroutine spawn in spawningCoroutines)
+        {
+            StopCoroutine(spawn);
+        }
     }
 
     private void RestartGame() 
     {
+        spawningCoroutines = new Coroutine[enemyPrefabs.Length];
+
         for (int i = 0; i < enemyPrefabs.Length; i++)
         {
-            StartCoroutine(spawnEnemy(enemyPrefabs[i].spawnDelayBetweenThisEnemyType, i));
+            spawningCoroutines[i] = StartCoroutine(spawnEnemy(enemyPrefabs[i].spawnDelayBetweenThisEnemyType, i));       
         }
     }
 
@@ -62,11 +73,4 @@ public class EnemyManager : MonoBehaviour
         public int hp;
         public Color enemyColor;
     }
-}
-
-public interface IHaveEnemyData
-{
-    void addEnemyData(Action<GameObject, int> enemyKilled, float _moveSpeed, int _enemyHP, Color _color, int index);
-
-    void getDamage();
 }
