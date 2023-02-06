@@ -3,14 +3,14 @@ using Google.XR.Cardboard;
 
 public class PlayerWeapon : MonoBehaviour
 {
-    private const float _maxDistance = 20;
-    private GameObject _gazedAtObject = null;
-
-    [SerializeField] private ParticleSystem gunpowderReference;
+    [SerializeField] private ParticleSystem gunpowderEffect;
     [SerializeField] private ParticleSystem onHitEffect;
+    [SerializeField] private LayerMask bulletTargetLayer;
 
+    private const float maxDistance = 20;
     private Transform raycastStartPos;
 
+    
     private void Start()
     {
         raycastStartPos = transform.GetChild(0);
@@ -20,23 +20,18 @@ public class PlayerWeapon : MonoBehaviour
     {
         if (Api.IsTriggerPressed || Input.GetMouseButtonUp(0))
         {
-            gunpowderReference.Play();
+            gunpowderEffect.Play();
 
             RaycastHit hit;
-            if (Physics.Raycast(raycastStartPos.position, raycastStartPos.forward, out hit, _maxDistance))
+            if (Physics.Raycast(raycastStartPos.position, raycastStartPos.forward, out hit, maxDistance, bulletTargetLayer))
             {
-                if (_gazedAtObject != hit.transform.gameObject && hit.transform.gameObject.layer == 9)
+                if (hit.transform.GetComponent<IHaveEnemyData>() != null)
                 {
-                    _gazedAtObject = hit.transform.gameObject;
-                }
+                    hit.transform.GetComponent<IHaveEnemyData>().getDamage();
 
-                //_gazedAtObject?.SendMessage("OnPointerClick"); //ZMIENI? !!!
-                OnHitEffect(hit.point);
-            }
-            else
-            {
-                _gazedAtObject = null;
-            }         
+                    OnHitEffect(hit.point);
+                }
+            }      
         }
     }
 

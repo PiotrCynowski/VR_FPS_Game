@@ -29,7 +29,7 @@ public class PlayerStats : MonoBehaviour
         set
         {
             _playerScore = value;
-            scoreInfoText.text = "Score: " + _playerScore;
+            scoreInfoText.text = _playerScore.ToString();
             menuScoreText.text = "Score: " + _playerScore;
         }
     }

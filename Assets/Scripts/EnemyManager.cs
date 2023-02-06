@@ -64,7 +64,9 @@ public class EnemyManager : MonoBehaviour
     }
 }
 
-public interface ICanGetEnemyData
+public interface IHaveEnemyData
 {
-    void init(Action<GameObject, int> enemyKilled, float _moveSpeed, int _enemyHP, Color _color, int index);
+    void addEnemyData(Action<GameObject, int> enemyKilled, float _moveSpeed, int _enemyHP, Color _color, int index);
+
+    void getDamage();
 }

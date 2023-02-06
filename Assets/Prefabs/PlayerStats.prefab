@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1328024832802003429}
   - component: {fileID: 1328024832802003426}
   m_Layer: 5
-  m_Name: TextScore
+  m_Name: Score_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -194,7 +194,7 @@ GameObject:
   - component: {fileID: 1328024833290639943}
   - component: {fileID: 1328024833290639940}
   m_Layer: 5
-  m_Name: start_Button
+  m_Name: Restart_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -352,7 +352,7 @@ GameObject:
   - component: {fileID: 1328024833444418138}
   - component: {fileID: 1328024833444418140}
   m_Layer: 5
-  m_Name: restartPanel
+  m_Name: Restart_Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -455,7 +455,7 @@ GameObject:
   - component: {fileID: 1328024833622723678}
   - component: {fileID: 1328024833622723679}
   m_Layer: 5
-  m_Name: TextRecord
+  m_Name: BestScore_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -535,7 +535,7 @@ GameObject:
   - component: {fileID: 1328024834086745478}
   - component: {fileID: 1328024834086745479}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: Restart_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -613,7 +613,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1328024834228482463}
   m_Layer: 5
-  m_Name: buttonContainer
+  m_Name: Container_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -946,11 +946,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerStatsCanvas: {fileID: 4891625218484707581}
   PlayerRestartMenuCanvas: {fileID: 1328024832965179070}
-  scoreInfoText: {fileID: 0}
-  menuScoreText: {fileID: 0}
-  menuBestResultText: {fileID: 0}
-  hpImageFill: {fileID: 0}
-  initialPlayerHealth: 0
+  scoreInfoText: {fileID: 4891625218556789165}
+  menuScoreText: {fileID: 1328024832802003426}
+  menuBestResultText: {fileID: 1328024833622723679}
+  hpImageFill: {fileID: 4891625219783800523}
+  initialPlayerHealth: 5
 --- !u!1 &4891625219257568366
 GameObject:
   m_ObjectHideFlags: 0

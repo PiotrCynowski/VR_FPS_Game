@@ -28,9 +28,9 @@ namespace Piotr.EnemySpawnerObjectPool
             {
                 // On adding enemy to pool, with extra data from Enemy Manager           
                 var enemy = GameObject.Instantiate(enemyObject, getPosAroundPlayer(), Quaternion.identity, EnemyContainer);
-                if (enemy.GetComponent<ICanGetEnemyData>() != null)
+                if (enemy.GetComponent<IHaveEnemyData>() != null)
                 {
-                    enemy.GetComponent<ICanGetEnemyData>().init(thisEnemyKilled, enemySpeed, enemyHP, enemyColor, index);
+                    enemy.GetComponent<IHaveEnemyData>().addEnemyData(thisEnemyKilled, enemySpeed, enemyHP, enemyColor, index);
                 }
                 return enemy;
             },

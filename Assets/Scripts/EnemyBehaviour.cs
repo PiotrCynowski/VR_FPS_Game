@@ -2,30 +2,60 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class EnemyBehaviour : MonoBehaviour, ICanGetEnemyData
+public class EnemyBehaviour : MonoBehaviour, IHaveEnemyData
 {
-    private Action<GameObject, int> thisEnemyKilled;
+    private Action<GameObject, int> thisEnemyRemove;
 
     private float moveSpeed;
     private int initHP;
     private int currentHP;
     private int whichListPool;
+
+    MaterialPropertyBlock[] propBlock;
     private Color color;
+
     private Renderer[] renderers;
 
-    public void init(Action<GameObject, int> enemyKilled, float _moveSpeed, int enemyHP, Color colorBase, int index)
+    public void addEnemyData(Action<GameObject, int> enemyKilled, float moveSpeedE, int enemyHP, Color colorBase, int index)
     {
-        thisEnemyKilled = enemyKilled;
+        thisEnemyRemove = enemyKilled;
+
         renderers = GetComponentsInChildren<Renderer>();
 
-        moveSpeed = _moveSpeed;
+        moveSpeed = moveSpeedE;
         currentHP = initHP = enemyHP;
-        color = colorBase;
         whichListPool = index;
+
+        propBlock = new MaterialPropertyBlock[2];
+
+        propBlock[0] = new MaterialPropertyBlock();
+        propBlock[1] = new MaterialPropertyBlock();
+
+        propBlock[0].SetColor("_Color" , colorBase);
+        propBlock[1].SetColor("_Color", Color.red);
 
         foreach (Renderer r in renderers)
         {
             r.material.SetColor("_Color", colorBase);
+        }
+    }
+
+    public void getDamage()
+    {
+        currentHP--;
+
+        if (currentHP <= 0)
+        {
+            thisEnemyRemove(gameObject, whichListPool);
+
+            if (PlayerStats.Instance != null)
+            {
+                PlayerStats.Instance.PlayerScore++;
+            }
+        }
+        else
+        {
+            StartCoroutine(colorBlink());
         }
     }
 
@@ -37,7 +67,9 @@ public class EnemyBehaviour : MonoBehaviour, ICanGetEnemyData
     public void OnDisable()
     {
         foreach (Renderer r in renderers)
-            r.material.SetColor("_Color", color);
+        {
+            r.SetPropertyBlock(propBlock[0]);
+        }
 
         currentHP = initHP;
     }
@@ -57,37 +89,28 @@ public class EnemyBehaviour : MonoBehaviour, ICanGetEnemyData
     {
         if (Vector3.Distance(transform.position, Vector3.zero) <= 2.5f)
         {
-            thisEnemyKilled(gameObject, whichListPool);
-        }
-    }
-
-    private void OnDamage()
-    {
-        currentHP--;
-        
-        if (currentHP <= 0)
-        {
-            thisEnemyKilled(gameObject, whichListPool);
-        }
-        else
-        {
-            StartCoroutine(colorBlink());
+            thisEnemyRemove(gameObject, whichListPool);
         }
     }
 
     private IEnumerator colorBlink()
     {
         foreach (Renderer r in renderers)
-            r.material.SetColor("_Color", Color.red);
+        {
+            r.SetPropertyBlock(propBlock[1]);
+        }
 
         yield return new WaitForSeconds(.1f);
 
         foreach (Renderer r in renderers)
-            r.material.SetColor("_Color", color);
+        {
+            r.SetPropertyBlock(propBlock[0]);
+        }
+           
     }
 
     private void ResetThisEnemy() //shut down enemy on game restart
     {
-        thisEnemyKilled(gameObject, whichListPool);
-    }  
+        thisEnemyRemove(gameObject, whichListPool);
+    }
 }

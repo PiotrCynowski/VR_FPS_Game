@@ -4883,7 +4883,7 @@ GameObject:
   - component: {fileID: 3601772711883718093}
   - component: {fileID: 3601772711883718092}
   m_Layer: 0
-  m_Name: Pointer_Particle System_
+  m_Name: Pointer_Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9839,8 +9839,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 433efa25b2bc08144b3a2ee90ae26ee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gunpowderReference: {fileID: 3601772710622715808}
+  gunpowderEffect: {fileID: 3601772710622715808}
   onHitEffect: {fileID: 8741445270420406224}
+  bulletTargetLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1 &8098539583321276539
 GameObject:
   m_ObjectHideFlags: 0
