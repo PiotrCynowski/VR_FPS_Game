@@ -417,6 +417,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerRig_VR_or_Not
       objectReference: {fileID: 0}
+    - target: {fileID: 658487770861826653, guid: ce59e00b82cd42f4e818e7838d167d0c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce59e00b82cd42f4e818e7838d167d0c, type: 3}
 --- !u!1001 &1328024834343176769
@@ -426,6 +430,86 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1328024832802003427, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024832802003427, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024832802003427, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024832802003427, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024832802003427, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024832802003427, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024833290639940, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ButtonGameRestart
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024833290639940, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Player.PlayerStats, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024833622723676, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024833622723676, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024833622723676, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024833622723676, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024833622723676, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024833622723676, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024834228482463, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024834228482463, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024834228482463, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024834228482463, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024834228482463, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1328024834228482463, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4891625218484707581, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
       propertyPath: m_Camera
       value: 
@@ -433,6 +517,10 @@ PrefabInstance:
     - target: {fileID: 4891625219155049237, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
       propertyPath: m_Name
       value: PlayerStats
+      objectReference: {fileID: 0}
+    - target: {fileID: 4891625219155049237, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4891625219155049239, guid: 11704f677bde6eb4891e5dcbc987cf18, type: 3}
       propertyPath: m_RootOrder

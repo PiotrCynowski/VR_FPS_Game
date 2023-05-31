@@ -9,7 +9,7 @@ namespace Piotr.EnemySpawnerObjectPool
         private readonly bool collectionChecks = true;
         private readonly int maxPoolSize = 10;
 
-        private readonly List<ObjectPool<GameObject>> poolEnemyList = new List<ObjectPool<GameObject>>();
+        private readonly List<ObjectPool<GameObject>> poolEnemyList = new();
         private Transform EnemyContainer;
 
         public float spawnDistanceFromPlayer;
@@ -35,13 +35,13 @@ namespace Piotr.EnemySpawnerObjectPool
             EnemyContainer = new GameObject().GetComponent<Transform>();
             EnemyContainer.name = "EnemyContainer";
 
-            ObjectPool<GameObject> poolEnemy = new ObjectPool<GameObject>(() =>
+            ObjectPool<GameObject> poolEnemy = new(() =>
             {
                 // On adding enemy to pool, with extra data from Enemy Manager           
-                var enemy = GameObject.Instantiate(enemyObject, getPosAroundPlayer(), Quaternion.identity, EnemyContainer);
+                var enemy = GameObject.Instantiate(enemyObject, GetPosAroundPlayer(), Quaternion.identity, EnemyContainer);
                 if (enemy.GetComponent<IHaveEnemyData>() != null)
                 {
-                    enemy.GetComponent<IHaveEnemyData>().AddEnemyData(thisEnemyKilled, enemySpeed, enemyHP, enemyColor, index);
+                    enemy.GetComponent<IHaveEnemyData>().AddEnemyData(ThisEnemyKilled, enemySpeed, enemyHP, enemyColor, index);
                 }
                 return enemy;
             },
@@ -54,31 +54,31 @@ namespace Piotr.EnemySpawnerObjectPool
         #region poolOperations
         private void OnReturnedToPool(GameObject system)
         {
-            system.gameObject.SetActive(false);
+            system.SetActive(false);
         }
 
         private void OnTakeFromPool(GameObject system)
         {
-            system.transform.position = getPosAroundPlayer();
-            system.gameObject.SetActive(true);
+            system.transform.position = GetPosAroundPlayer();
+            system.SetActive(true);
         }
 
         // If the pool capacity is reached then any items returned will be destroyed.
         private void OnDestroyPoolObject(GameObject system)
         {
-            GameObject.Destroy(system.gameObject);
+            GameObject.Destroy(system);
         }
         #endregion
 
 
-        private Vector3 getPosAroundPlayer()
+        private Vector3 GetPosAroundPlayer()
         {
             Vector2 outsideCirclePos = Random.insideUnitCircle.normalized * spawnDistanceFromPlayer;
-            Vector3 pos = new Vector3(outsideCirclePos.x, 0, outsideCirclePos.y);
+            Vector3 pos = new(outsideCirclePos.x, 0, outsideCirclePos.y);
             return pos;
         }
 
-        private void thisEnemyKilled(GameObject enemy, int poolIndex)
+        private void ThisEnemyKilled(GameObject enemy, int poolIndex)
         {
             poolEnemyList[poolIndex].Release(enemy);
         }
